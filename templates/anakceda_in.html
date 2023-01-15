@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>anakceda</title>
+</head>
+<body>
+<form method="POST">
+  <div>upiši tekst</div>
+  <div>
+    <input type="text" name="uno" placeholder="Upiši slova" value="{{ uno }}">
+  </div>
+  <div>
+    <input type="submit" value="pošalji">
+  </div>
+    <hr>
+    <div>encoded:{{ uno_e }}</div>
+  <a href="/decode">idi na decode</a>
+</form>
+
+</body>
+</html>
