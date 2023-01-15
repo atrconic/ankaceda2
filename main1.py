@@ -1,9 +1,11 @@
 from flask import Flask
 from flask import render_template, request
+from flask import session
+from flask import Flask, render_template, request, redirect, url_for
 
 app = Flask(__name__)
 brojac: int = 6
-
+app.secret_key = b'314159260'
 
 rules: dict = {
     "a": "⍺",
@@ -52,11 +54,37 @@ for i in rules:
 
 @app.route("/")
 def hello_world():
-    return render_template("button.html")
+    username = session.get("username")
+    return render_template('button.html', username=username)
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        session['username'] = request.form['username']
+        return redirect(url_for('hello_world'))
+    return '''
+        <form method="post">
+            <p><input type=text name=username>
+            <p><input type=submit value=Login>
+        </form>
+    '''
+
+
+@app.route('/logout')
+def logout():
+    # remove the username from the session if it's there
+    if 'username' in session:
+        session.pop('username', None)
+    return redirect(url_for('hello_world'))
 
 
 @app.route('/encode', methods=['GET', 'POST'])
 def encode():
+    username = session.get("username")
+    if not username:
+        return redirect(url_for('hello_world'))
+
     if request.method == "POST":
         uno = request.form["uno"]
         uno_e = ""
